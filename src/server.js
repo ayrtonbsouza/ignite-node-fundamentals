@@ -46,30 +46,36 @@ const server = http.createServer((request, response) => {
     You can see the full list of headers in the following link: https://developer.mozilla.org/en-US/docs/Web/API/Headers
   */
 
+  /*
+    We need to use Status Codes to identify the status of the request.
+    There are a few types of status codes:
+    - 200: OK
+    - 201: Created
+    - 204: No Content
+    - 400: Bad Request
+    - 404: Not Found
+    - 500: Internal Server Error
+
+    You can see the full list of status codes in the following link: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status
+    I honestly prefer to see the status codes in the following link: https://http.cat/
+  */
+
   if (method === 'GET' && url === '/users') {
     return response
       .setHeader('Content-Type', 'application/json')
       .end(JSON.stringify(users));
   }
+
   if (method === 'POST' && url === '/users') {
     users.push({
       id: 1,
       name: 'John Doe',
       email: 'john.doe@example.com',
     });
-    return response.end('User created');
-  }
-  if (method === 'PUT' && url === '/users') {
-    return response.end('Update a user data as a whole');
-  }
-  if (method === 'DELETE' && url === '/users') {
-    return response.end('Delete a user');
-  }
-  if (method === 'PATCH' && url === '/users') {
-    return response.end('Update a specific data from a user');
+    return response.writeHead(201).end()
   }
 
-  return response.end('Hello World!');
+  return response.writeHead(404).end();
 });
 
 server.listen(3333);
